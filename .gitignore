@@ -1,0 +1,46 @@
+## .NET / C# Build Artifacts
+bin/
+obj/
+*.binlog
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Visual Studio & JetBrains IDE
+.vs/
+.idea/
+*.DotSettings.user
+*.ipch
+
+## Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+## Databases & Local Logs
+*.db
+*.db-log
+*.db-shm
+*.db-wal
+*.log
+
+## Test & Coverage Results
+TestResults/
+[Tt]est[Rr]esult*/
+coverage*.json
+coverage*.xml
+coverage*.info
+
+## OS Generated Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+## Distribution Packages
+*.zip
+*.tar.gz
