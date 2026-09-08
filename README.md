@@ -1,51 +1,68 @@
-# Cooperativa Financiera El Progreso - Cashier & Management Core Banking System
+# Cooperativa Financiera El Progreso - Core Bancario, Módulo de Caja & Portal Web
 
-A robust, enterprise-grade core banking and cashier management solution built with **.NET 10**, **C#**, and **Layered Clean Architecture** for *Cooperativa Financiera El Progreso*.
-
----
-
-## 1. System Overview
-
-Cooperativa Financiera El Progreso manages the savings accounts of approximately 300 associates. This system provides a specialized, resilient, and interactive terminal interface designed specifically for bank tellers/cashiers and branch managers.
-
-### Key Capabilities
-- **Associate Account Lifecycle**: Registration, partial case-insensitive search (by ID or name), multi-field contact updates (Name, Phone, Email, Address), deletion guards (preventing deletion if transactions exist).
-- **Interactive Search Portal**: Cashiers can search for associates and open a dedicated **Associate Actions Submenu** to immediately view their contact card, live TRM conversion, transaction ledger, or execute deposits/withdrawals with pre-loaded context.
-- **Colombian Input Validation**: Enforces Colombian document formats (`CC`, `TI`, `CE`, `NIT`, `PAS`), contact formats (7–10 digit Colombian phone numbers, valid emails), and tripartite name requirements ($\ge 3$ words: given name + two surnames).
-- **Strict Ledger-Based Balance**: The account balance is **never directly editable**; it is dynamically calculated as the read-only sum of the transaction ledger.
-- **Automated Commission Engine**: Automatic **$8,000 COP** handling commission fee applied to withdrawals exceeding **$1,000,000 COP**.
-- **Real-Time Official USD Conversion**: Direct, asynchronous integration with the open government API from *Superintendencia Financiera de Colombia* (`datos.gov.co`) with error fallback.
-- **6 Management Reports**: Real-time financial reports for cooperative leadership.
-- **Interactive Terminal UI**: Built with **Spectre.Console**, featuring page-by-page table navigation (10 records/page), inline input validations, multi-criteria filtering, custom sorting, and cancellation support (`'0'`, `'volver'`, or `'cancelar'`).
+Solución integral y de grado empresarial de core bancario, ventanilla de caja y reportes gerenciales desarrollada con **.NET 10**, **C#**, **Clean Architecture** y el sistema de diseño institucional **Impeccable** (*The Sovereign Ledger House*) para la *Cooperativa Financiera El Progreso*.
 
 ---
 
-## 2. Layered Clean Architecture
+## 1. Descripción del Sistema
 
-The solution adheres strictly to separation of concerns across four independent layers:
+La **Cooperativa Financiera El Progreso** custodia los fondos de ahorro de más de 300 asociados en Colombia. Esta plataforma proporciona una solución doble y complementaria:
+
+1. **🌐 Portal Web Institucional & Core de Caja (`ElProgreso.Coop.Web`)**: Aplicación web SPA moderna, accesible y de alta fidelidad visual que integra cotización TRM oficial en tiempo real, simulador de ahorro, ventanilla de operaciones monetarias con comprobantes digitales de caja, ficha 360° del asociado y dashboard ejecutivo de reportes gerenciales con paginación.
+2. **🖥️ Módulo de Terminal Interactivo (`ElProgreso.Coop.Presentation.Console`)**: Interfaz CLI basada en **Spectre.Console** con tablas paginadas, validaciones guiadas y menús fluidos para cajeros y supervisores.
+
+---
+
+## 2. Capacidades y Reglas de Negocio Clave
+
+- **Libro Mayor Inmutable (*Immutable Ledger*)**: El saldo de las cuentas de ahorro **nunca es un campo directamente editable**. Se deriva en tiempo real como la sumatoria de solo lectura de todas las transacciones históricas registradas en el libro mayor contable.
+- **Motor Automático de Comisiones**: Tarifa automática de **$8.000 COP** aplicada a retiros que superen el umbral de **$1.000.000 COP** (`HighWithdrawalThreshold`).
+- **Sincronización Oficial de TRM en Tiempo Real**: Integración directa y resiliente con la API abierta de la *Superintendencia Financiera de Colombia* (`datos.gov.co`) para consultas de saldo equivalentes en USD y conversor de divisas bidireccional (COP ⇄ USD).
+- **Validación Regulatoria Colombiana**: Soporte integral para tipos de documentos oficiales (`CC`, `TI`, `CE`, `NIT`, `PAS`), formato de números de contacto colombianos (7 a 10 dígitos) y convención de nombres tripartitos ($\ge 3$ palabras: nombres + dos apellidos).
+- **Guardia de Integridad y Eliminación**: Prohibición estricta de eliminar cualquier asociado que cuente con movimientos históricos registrados en el libro mayor.
+- **6 Reportes Gerenciales Consolidados**: Métricas en tiempo real de solvencia, ranking de mejores saldos, asociados dormidos/inactivos, mayores movimientos, resumen por asociado y balance de caja por rango dinámico de fechas.
+
+---
+
+## 3. Arquitectura Limpia por Capas (Clean Architecture)
+
+El proyecto mantiene una estricta separación de responsabilidades en capas independientes:
 
 ```
 ElProgreso.Coop/
+├── .impeccable/                               # Briefs de superficie y esquemas de diseño Impeccable
+│   ├── surfaces/index-html.md
+│   └── design.json
+├── DESIGN.md                                  # Especificación del sistema de diseño ("The Sovereign Ledger House")
+├── PRODUCT.md                                 # Definición y visión del producto
+├── CLASS_DIAGRAM.md                           # Diagrama de clases y relaciones de dominio
 ├── src/
-│   ├── ElProgreso.Coop.Domain/                   # Layer 1: Core Domain Entities, Enums & Exceptions
+│   ├── ElProgreso.Coop.Domain/                # Capa 1: Entidades de Dominio, Enums y Excepciones
 │   │   ├── Entities/ (Associate, Transaction)
 │   │   ├── Enums/ (DocumentType, TransactionType)
-│   │   └── Exceptions/ (Domain Exceptions)
-│   ├── ElProgreso.Coop.Application/              # Layer 2: Business Logic, DTOs, Reports & Validation
+│   │   └── Exceptions/ (DomainException, InsufficientFundsException, etc.)
+│   ├── ElProgreso.Coop.Application/           # Capa 2: Casos de Uso, DTOs, Servicios e Interfaces
 │   │   ├── DTOs/ (ReportDtos, AssociateFilterCriteria, ExchangeRateResult)
 │   │   ├── Interfaces/ (IAssociateRepository, ITransactionRepository, IExchangeRateService, IBankingService, IManagementReportService)
 │   │   ├── Services/ (BankingService, ManagementReportService)
 │   │   └── Validation/ (AssociateValidator, ValidationResult)
-│   ├── ElProgreso.Coop.Infrastructure/           # Layer 3: Persistence, External APIs & Seeding
+│   ├── ElProgreso.Coop.Infrastructure/        # Capa 3: Persistencia LiteDB, APIs Externas y Seeding
 │   │   ├── Data/ (LiteDbContext, DatabaseSeeder)
 │   │   ├── Repositories/ (LiteDbAssociateRepository, LiteDbTransactionRepository)
 │   │   └── Services/ (ExchangeRateService)
-│   └── ElProgreso.Coop.Presentation.Console/     # Layer 4: Interactive Terminal Cashier UI (Spectre.Console)
-│       ├── ConsoleUi.cs
-│       ├── CashierApp.cs
-│       └── Program.cs
+│   ├── ElProgreso.Coop.Presentation.Console/  # Capa 4A: Interfaz de Terminal (Spectre.Console)
+│   │   ├── ConsoleUi.cs
+│   │   ├── CashierApp.cs
+│   │   └── Program.cs
+│   └── ElProgreso.Coop.Web/                   # Capa 4B: Host Web API (.NET 10) & Frontend SPA
+│       ├── Program.cs                         # Minimal APIs REST & Static Files Server
+│       ├── appsettings.json
+│       └── wwwroot/                           # Frontend Institucional Impeccable
+│           ├── index.html                     # SPA con 3 Modos (Portal, Caja & Directorio, Reportes)
+│           ├── css/                           # tokens.css, components.css, trm-widget.css
+│           └── js/                            # app.js (API Client, Estado y Paginador de Reportes)
 └── tests/
-    └── ElProgreso.Coop.Tests/                    # Comprehensive Automated Test Suite (64 Tests)
+    └── ElProgreso.Coop.Tests/                 # Suite de 64 Pruebas Unitarias y de Integración
         ├── DomainTests.cs
         ├── ApplicationTests.cs
         ├── InfrastructureTests.cs
@@ -54,32 +71,7 @@ ElProgreso.Coop/
 
 ---
 
-## 3. Design Patterns Applied
-
-The project leverages recognized software design patterns to ensure maintainability, scalability, and testability:
-
-1. **Repository Pattern (`IAssociateRepository`, `ITransactionRepository`)**:
-   - Encapsulates data access and storage logic behind clean abstractions.
-   - Decouples business services from the specific database engine (LiteDB), enabling painless switching to SQL Server, PostgreSQL, or in-memory test doubles.
-2. **Dependency Injection (IoC Container)**:
-   - Configured via `Microsoft.Extensions.DependencyInjection`.
-   - Injects abstractions into consumers (`BankingService`, `ManagementReportService`, `CashierApp`), supporting inversion of control and loose coupling.
-3. **Factory Method Pattern**:
-   - `Associate.CreateDeposit()` and `Associate.CreateWithdrawal()` act as Domain Factory methods.
-   - Guarantees that no `Transaction` can ever be created in an invalid state or violate account balance constraints.
-4. **Aggregate Root Pattern (DDD)**:
-   - `Associate` acts as the root of the transactional consistency boundary.
-   - Direct mutation of the internal transaction ledger is forbidden; all balance mutations flow through the aggregate root.
-5. **DTO (Data Transfer Object) Pattern**:
-   - Specialized records (`ReportDtos`, `AssociateFilterCriteria`, `ExchangeRateResult`) transfer data across application and presentation boundaries without exposing internal entity internals.
-6. **Result Pattern**:
-   - `ValidationResult` and `ExchangeRateResult` convey operation outcomes (success/failure, error messages) without throwing expensive exceptions for predictable validation flows.
-
----
-
-## 4. Complete Class Diagram, Relationships & Multiplicities
-
-> **Standalone Reference**: A dedicated document is available in [`CLASS_DIAGRAM.md`](CLASS_DIAGRAM.md).
+## 4. Diagrama de Dominio y Relaciones
 
 ```mermaid
 classDiagram
@@ -139,221 +131,103 @@ classDiagram
         +CalculateCommission(type, amount)$ decimal
     }
 
-    class DomainException {
-        +DomainException(message)
-    }
-
-    class InsufficientFundsException {
-        +decimal CurrentBalance
-        +decimal RequestedAmount
-        +decimal Commission
-    }
-
-    class InvalidTransactionAmountException
-    class AssociateNotFoundException
-    class AssociateHasTransactionsException
-
-    DomainException <|-- InsufficientFundsException
-    DomainException <|-- InvalidTransactionAmountException
-    DomainException <|-- AssociateNotFoundException
-    DomainException <|-- AssociateHasTransactionsException
-
-    %% APPLICATION LAYER
-    class IAssociateRepository {
-        <<interface>>
-        +GetByDocumentAsync(document) Task~Associate?~
-        +SearchByNameAsync(namePattern) Task~IEnumerable~Associate~~
-        +GetAllAsync() Task~IEnumerable~Associate~~
-        +AddAsync(associate) Task
-        +UpdateAsync(associate) Task
-        +DeleteAsync(document) Task
-        +ExistsAsync(document) Task~bool~
-    }
-
-    class ITransactionRepository {
-        <<interface>>
-        +GetByIdAsync(id) Task~Transaction?~
-        +GetByAssociateDocumentAsync(document) Task~IEnumerable~Transaction~~
-        +GetAllAsync() Task~IEnumerable~Transaction~~
-        +AddAsync(transaction) Task
-        +HasTransactionsAsync(document) Task~bool~
-    }
-
-    class IExchangeRateService {
-        <<interface>>
-        +GetUsdExchangeRateAsync() Task~ExchangeRateResult~
-    }
-
-    class IBankingService {
-        <<interface>>
-        +RegisterAssociateAsync(doc, name, docType, phone, email, address) Task~Associate~
-        +UpdateAssociateNameAsync(doc, newName) Task~Associate~
-        +UpdateAssociatePhoneAsync(doc, newPhone) Task~Associate~
-        +UpdateAssociateEmailAsync(doc, newEmail) Task~Associate~
-        +UpdateAssociateAddressAsync(doc, newAddress) Task~Associate~
-        +UpdateAssociateContactInfoAsync(doc, phone, email, address) Task~Associate~
-        +UpdateAssociateProfileAsync(doc, name, phone, email, address) Task~Associate~
-        +DeleteAssociateAsync(doc) Task
-        +GetAssociateByDocumentAsync(doc) Task~Associate?~
-        +SearchAssociatesAsync(query) Task~IEnumerable~Associate~~
-        +GetAllAssociatesAsync() Task~IEnumerable~Associate~~
-        +GetFilteredAssociatesAsync(criteria) Task~IEnumerable~Associate~~
-        +DepositAsync(doc, amount) Task~Transaction~
-        +WithdrawAsync(doc, amount) Task~Transaction~
-        +GetAssociateTransactionsAsync(doc) Task~IEnumerable~Transaction~~
-    }
-
-    class IManagementReportService {
-        <<interface>>
-        +GetCooperativeOverviewAsync() Task~CooperativeOverviewReport~
-        +GetTop5AssociatesByBalanceAsync() Task~IEnumerable~TopAssociateReportItem~~
-        +GetDormantAssociatesAsync() Task~IEnumerable~DormantAssociateReportItem~~
-        +GetDateRangeSummaryAsync(start, end) Task~DateRangeSummaryReport~
-        +GetTop10LargestTransactionsAsync() Task~IEnumerable~LargestTransactionReportItem~~
-        +GetCashierMovementSummaryPerAssociateAsync() Task~IEnumerable~CashierAssociateMovementReportItem~~
-    }
-
-    class BankingService {
-        -IAssociateRepository _associateRepository
-        -ITransactionRepository _transactionRepository
-    }
-
-    class ManagementReportService {
-        -IAssociateRepository _associateRepository
-        -ITransactionRepository _transactionRepository
-    }
-
-    IBankingService <|.. BankingService
-    IManagementReportService <|.. ManagementReportService
-
-    %% INFRASTRUCTURE LAYER
-    class LiteDbContext {
-        +LiteDatabase Database
-        +ILiteCollection~Associate~ Associates
-        +ILiteCollection~Transaction~ Transactions
-    }
-
-    class LiteDbAssociateRepository
-    class LiteDbTransactionRepository
-    class ExchangeRateService
-
-    IAssociateRepository <|.. LiteDbAssociateRepository
-    ITransactionRepository <|.. LiteDbTransactionRepository
-    IExchangeRateService <|.. ExchangeRateService
-
-    %% PRESENTATION LAYER
-    class CashierApp {
-        -IBankingService _bankingService
-        -IManagementReportService _reportService
-        -IExchangeRateService _exchangeRateService
-        +RunAsync() Task
-    }
-
-    %% RELATIONSHIPS
-    Associate "1" o-- "0..*" Transaction : has ledger entries
-    Associate --> DocumentType
-    Transaction --> TransactionType
-    BankingService --> IAssociateRepository
-    BankingService --> ITransactionRepository
-    ManagementReportService --> IAssociateRepository
-    ManagementReportService --> ITransactionRepository
-    LiteDbAssociateRepository --> LiteDbContext
-    LiteDbTransactionRepository --> LiteDbContext
-    CashierApp --> IBankingService
-    CashierApp --> IManagementReportService
-    CashierApp --> IExchangeRateService
+    Associate "1" *-- "0..*" Transaction : contains >
+    Associate --> DocumentType : has
+    Transaction --> TransactionType : has
 ```
 
 ---
 
-## 5. Business Rules & Technical Decisions
+## 5. Plataforma Web & Endpoints REST API (.NET 10)
 
-### Dynamic Balance Derivation (No Setter)
-- `Associate.Balance` has **no setter**. It is a dynamic getter property computed from the internal transactions collection:
-  $$\text{Balance} = \sum (\text{TotalImpact})$$
-  Where:
-  - $\text{TotalImpact}_{\text{Deposit}} = +\text{Amount}$
-  - $\text{TotalImpact}_{\text{Withdrawal}} = -(\text{Amount} + \text{Commission})$
+El proyecto `ElProgreso.Coop.Web` expone una API REST moderna basada en **Minimal APIs** junto a su interfaz web SPA servida desde `wwwroot/`:
 
-### Commission Fee Calculation
-- Threshold: Withdrawals $> 1,000,000\text{ COP}$.
-- Fee: Fixed $8,000\text{ COP}$.
-- Validation Guard: A withdrawal is rejected if $\text{Balance} < \text{Amount} + \text{Commission}$. No account can ever drop below zero (`InsufficientFundsException`).
+### Catálogo de Endpoints REST
 
-### Associate Deletion Guard
-- An associate can only be deleted if they have **zero registered transactions** (`HasTransactionsAsync == false`).
-- If transactions exist, an `AssociateHasTransactionsException` is thrown, protecting financial audit integrity.
-
-### Real-Time External TRM API
-- Endpoint: `https://datos.gov.co/resource/32sa-8pi3.json?$order=vigenciadesde%20DESC&$limit=1`
-- Asynchronous consumption via `HttpClient`.
-- Parses official rate (`valor`), start validity (`vigenciadesde`), and end validity (`vigenciahasta`).
-- Resilient fallback mechanism: Network failures or timeouts return a graceful error message without crashing the terminal.
-
----
-
-## 6. Management Reports (Informes de Gerencia)
-
-1. **"¿Cuánta plata tenemos?" (Cooperative Overview)**:
-   - Total associates registered (300).
-   - Total cooperative savings in custody.
-   - Average balance per associate.
-2. **"¿Quiénes son mis mejores asociados?" (Top 5 Balances)**:
-   - Top 5 associates with the highest balances, ordered descending with document, name, and balance.
-3. **"¿Quiénes están dormidos?" (Dormant Accounts)**:
-   - Paginated list of associates with 0 registered transactions since onboarding.
-4. **"¿Cómo nos fue en un periodo?" (Date Range Summary)**:
-   - Filter by custom Start Date and End Date.
-   - Total deposits sum and count, total withdrawals sum and count, commissions collected, and net period cash flow.
-5. **"¿Cuáles fueron los movimientos más grandes?" (Top 10 Largest Transactions)**:
-   - Top 10 largest financial transactions cooperative-wide with date, type, associate name, and amount.
-6. **"¿Quién me está moviendo la caja?" (Cashier Movements Summary)**:
-   - Paginated summary per associate: name, transaction count, total deposited, total withdrawn + commissions, and current balance, sorted by transaction count descending.
+| Método | Endpoint | Descripción |
+| :--- | :--- | :--- |
+| `GET` | `/api/associates` | Listar todos los asociados o buscar por coincidencia de texto (`?query=`). |
+| `GET` | `/api/associates/{doc}` | Obtener ficha detallada de un asociado con saldo calculado. |
+| `POST` | `/api/associates` | Registrar nuevo asociado con validación de nombres tripartitos y contacto. |
+| `PUT` | `/api/associates/{doc}` | Actualizar información de perfil y contacto de un asociado. |
+| `DELETE`| `/api/associates/{doc}` | Eliminar asociado (protegido por guardia de historial). |
+| `POST` | `/api/transactions/deposit` | Registrar consignación monetaria en cuenta de ahorros. |
+| `POST` | `/api/transactions/withdraw` | Registrar retiro con cálculo y deducción automática de comisión. |
+| `GET` | `/api/transactions/associate/{doc}` | Consultar historial cronológico de transacciones de un asociado. |
+| `GET` | `/api/trm/live` | Obtener cotización oficial de la TRM del día sincronizada desde datos.gov.co. |
+| `GET` | `/api/reports/overview` | Reporte 1: Consolidado general (Total asociados, saldo total, promedio). |
+| `GET` | `/api/reports/top-associates` | Reporte 2: Top 5 asociados con mayores saldos en custodia. |
+| `GET` | `/api/reports/dormant-associates` | Reporte 3: Asociados inactivos sin transacciones registradas. |
+| `GET` | `/api/reports/largest-transactions` | Reporte 4: Top 10 transacciones de mayor valor en la cooperativa. |
+| `GET` | `/api/reports/cashier-movement` | Reporte 5: Resumen consolidado de movimientos por asociado. |
+| `GET` | `/api/reports/date-range-summary` | Reporte 6: Balance de caja por rango de fechas (`?start=&end=`). |
 
 ---
 
-## 7. Code Documentation & Standards
+## 6. Sistema de Diseño Impeccable (*The Sovereign Ledger House*)
 
-- **Language Policy**: 100% of the codebase (classes, methods, variables, interfaces, XML comments, unit tests, and commit messages) is written in English. Presentation strings visible to cashiers are in Spanish.
-- **XML Documentation (`/// <summary>`)**: Key business entities, validation rules, repository interfaces, and service methods are documented following C# XML docstring conventions.
-- **Clean Architecture & SOLID**: Strict Dependency Inversion using interfaces (`IBankingService`, `IAssociateRepository`, `ITransactionRepository`, `IExchangeRateService`, `IManagementReportService`).
+La interfaz visual se rige estrictamente por los principios de diseño documentados en [`DESIGN.md`](DESIGN.md):
+
+- **Paleta de Colores Institucional:**
+  - *Deep Obsidian Green* (`#062319`): Estructuras de anclaje, cabeceras y contrastes principales.
+  - *Forest Green* (`#0b3828`): Color institucional de marca para tarjetas principales y acciones primarias.
+  - *Rich Antique Gold* (`#b38515`) & *Bright Gold* (`#d4a32c`): Acentos económicos de alta jerarquía.
+  - *Architectural Canvas* (`#f2f6f4`): Lienzo pétreo de fondo con alto contraste y descanso visual.
+- **Tipografía y Legibilidad:**
+  - *Display / Titulares:* `Marcellus` (serif dignificado).
+  - *Cuerpo e Interfaz:* `Manrope` (sans geométrica de alta legibilidad).
+  - *Cifras y Datos:* `JetBrains Mono` con `font-variant-numeric: tabular-nums` (*The Tabular Truth Rule*).
+- **Acabado y Calidad (*Craft Floor*):**
+  - Sombras naturales con desenfoque suave (sin halos artificiales ni neones).
+  - Contraste estricto según estándares WCAG AA (>4.5:1 / >7:1 en badges dorados).
+  - Auditoría mecánica continua con 0 defectos detectados mediante `impeccable detect`.
 
 ---
 
-## 8. Technologies Used
+## 7. Guía de Ejecución y Pruebas
 
-- **Runtime & Language**: `.NET 10`, `C# 13`.
-- **UI Framework**: `Spectre.Console 0.49.1` (Interactive prompts, tables, rules, panels, spinners).
-- **Embedded Database**: `LiteDB 5.0.21` (Fast document-store embedded database with unique indexes and BSON mapping).
-- **HTTP Client**: `System.Net.Http.Json` for consuming open government financial endpoints.
-- **Testing**: `xUnit 2.9.3`, `Microsoft.NET.Test.Sdk 17.12.0`.
+### Prerrequisitos
+- [.NET 10 SDK](https://dotnet.microsoft.com/download) instalado en el sistema.
 
----
+### 🌐 Ejecutar el Portal Web (Recomendado)
+Para iniciar el servidor web con soporte de recarga en vivo (*live-reload*):
 
-## 9. Execution and Testing Instructions
+```bash
+dotnet watch --project src/ElProgreso.Coop.Web
+```
+> Abre tu navegador en **`http://localhost:5000`** para acceder a la aplicación.
 
-### Prerequisites
-- [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0)
-
-### 1. Run the Interactive Cashier Application
-Open a terminal in the root folder of the project (`ElProgreso.Coop`). Once located in the project root directory, execute:
+### 🖥️ Ejecutar la Aplicación de Consola (CLI)
+Para interactuar con la terminal de caja:
 
 ```bash
 dotnet run --project src/ElProgreso.Coop.Presentation.Console
 ```
 
-*(On initial launch, the system automatically creates and populates `elprogreso.db` with 300 realistic Colombian test associates and transactions).*
-
-### 2. Run Automated Unit & Integration Tests (64 Tests)
-From the project root directory:
+### 🧪 Ejecutar la Suite de Pruebas Automatizadas
+Para ejecutar las 64 pruebas unitarias y de integración:
 
 ```bash
 dotnet test
 ```
 
-### 3. Build the Full Distribution ZIP Package
-From the project root directory:
+### 🎨 Auditar la Interfaz Web con Impeccable
+Para validar el cumplimiento del sistema de diseño y accesibilidad:
 
 ```bash
-zip -r ElProgreso.Coop.zip . -x "*/bin/*" -x "*/obj/*" -x "*.git*" -x "*.db*"
+impeccable detect src/ElProgreso.Coop.Web/wwwroot/index.html
 ```
+
+---
+
+## 8. Patrones de Diseño Aplicados
+
+1. **Repository Pattern (`IAssociateRepository`, `ITransactionRepository`)**: Aísla la capa de persistencia (LiteDB) de las reglas de negocio.
+2. **Aggregate Root (DDD)**: `Associate` administra el límite de consistencia transaccional y calcula el saldo a partir de `_transactions`.
+3. **Factory Method**: Creación validada de transacciones mediante `Associate.CreateDeposit()` y `Associate.CreateWithdrawal()`.
+4. **Dependency Injection**: Inversión de control configurada nativamente en `Program.cs`.
+5. **DTO & Result Pattern**: Transferencia segura de datos y resultados tipados para reportes y validaciones.
+
+---
+
+© 2026 Cooperativa Financiera El Progreso. Todos los derechos reservados.

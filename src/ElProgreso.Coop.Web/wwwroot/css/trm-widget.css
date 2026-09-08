@@ -1,0 +1,161 @@
+/* ==========================================================================
+   Live TRM & Currency Converter Widget - Cooperativa El Progreso
+   Design System: The Sovereign Ledger House (Impeccable Craft Floor)
+   ========================================================================== */
+
+.trm-card {
+  background-color: var(--coop-green-forest);
+  color: var(--coop-text-on-dark);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--coop-border-on-dark);
+  box-shadow: var(--shadow-md);
+  padding: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.trm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.trm-title {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.trm-badge {
+  font-size: 0.75rem;
+  color: var(--coop-text-on-dark-muted);
+  margin-top: 0.15rem;
+}
+
+.trm-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.trm-sync-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--coop-text-on-dark);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.trm-sync-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--coop-gold-bright);
+}
+
+.trm-live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: var(--coop-green-deep);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.trm-dot {
+  width: 6px;
+  height: 6px;
+  background-color: var(--coop-gold-bright);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.trm-display-box {
+  background-color: var(--coop-green-deep);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.trm-caption {
+  font-size: 0.75rem;
+  color: var(--coop-text-on-dark-muted);
+  
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 0.375rem;
+}
+
+.trm-rate {
+  font-family: var(--font-mono);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.trm-meta {
+  font-size: 0.75rem;
+  color: var(--coop-gold-bright);
+  margin-top: 0.375rem;
+  font-family: var(--font-mono);
+}
+
+/* Converter Box */
+.converter-box {
+  background-color: var(--coop-green-deep);
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.converter-swap-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: var(--coop-gold-bright);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  margin: 0 auto;
+}
+
+.converter-swap-btn:hover {
+  background: var(--coop-gold-rich);
+  color: var(--coop-green-deep);
+}
+
+.converter-input {
+  width: 100%;
+  background: rgba(6, 35, 25, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.converter-input:focus {
+  border-color: var(--coop-gold-bright);
+}

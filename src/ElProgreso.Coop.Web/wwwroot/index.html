@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cooperativa Financiera El Progreso | Portal Institucional & Core de Caja</title>
+  <meta name="description" content="Entidad cooperativa financiera en Colombia. Seguridad basada en libro contable inmutable, conversión TRM en tiempo real, ventanilla de caja y reportes gerenciales.">
+  
+  <!-- Google Fonts: Marcellus, Manrope, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'coop-green-deep': '#062319',
+            'coop-green-forest': '#0b3828',
+            'coop-green-pine': '#154e38',
+            'coop-green-subtle': '#21664c',
+            'coop-gold-rich': '#b38515',
+            'coop-gold-bright': '#d4a32c',
+            'coop-gold-tag-bg': '#f4ecdc',
+            'coop-gold-tag-text': '#5c4303',
+            'coop-canvas': '#f2f6f4',
+            'coop-surface-white': '#ffffff',
+            'coop-surface-muted': '#e7eeea',
+            'coop-text-primary': '#101c16',
+            'coop-text-secondary': '#3b4d44',
+            'coop-text-tertiary': '#475a50',
+            'coop-text-on-dark': '#f6fbf8',
+            'coop-text-on-dark-muted': '#9fbeaf',
+          },
+          fontFamily: {
+            display: ['Marcellus', 'Georgia', 'serif'],
+            sans: ['Manrope', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            'sm': '0 2px 4px rgba(0, 0, 0, 0.05)',
+            'md': '0 6px 18px rgba(0, 0, 0, 0.08)',
+            'dark': '0 16px 36px rgba(0, 0, 0, 0.45)',
+          },
+          borderRadius: {
+            'sm': '4px',
+            'md': '8px',
+            'lg': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Modular Stylesheets (Impeccable Design System) -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/trm-widget.css">
+</head>
+<body class="min-h-screen flex flex-col bg-coop-canvas text-coop-text-primary font-sans antialiased">
+
+  <!-- Top Trust & Regulatory Bar -->
+  <aside class="bg-coop-green-deep text-coop-text-on-dark-muted text-xs py-2 px-6 border-b border-white/10" aria-label="Información regulatoria">
+    <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-3">
+      <div class="inline-flex items-center gap-2">
+        <span class="w-1.5 h-1.5 bg-coop-green-subtle rounded-full inline-block"></span>
+        <span>Entidad Solidaria Vigilada por la Superintendencia Financiera de Colombia</span>
+      </div>
+      <div class="inline-flex items-center gap-2">
+        <span id="trm-sync-badge">TRM Oficial Sincronizada: datos.gov.co</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Primary Site Header & Navigation -->
+  <header class="sticky top-0 z-40 bg-coop-canvas/95 backdrop-blur-md border-b border-coop-border-light">
+    <div class="max-w-6xl mx-auto px-6 py-3.5 flex justify-between items-center gap-6 flex-wrap">
+      <a href="javascript:void(0)" onclick="switchView('portal')" class="flex items-center gap-3.5 text-coop-green-deep no-underline">
+        <div class="w-10 h-10 bg-coop-green-forest border border-coop-gold-rich rounded flex items-center justify-center text-coop-gold-bright shadow-sm">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-display text-xl leading-tight font-normal tracking-tight block text-coop-green-deep">El Progreso</span>
+          <span class="text-xs text-coop-text-tertiary uppercase tracking-wider font-semibold block">Cooperativa Financiera</span>
+        </div>
+      </a>
+
+      <!-- View Selector Tabs (Zero Redundancy Navigation) -->
+      <nav class="nav-tab-container" aria-label="Modos del portal">
+        <button type="button" id="tab-btn-portal" class="nav-tab-btn active" onclick="switchView('portal')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          Portal & TRM
+        </button>
+        <button type="button" id="tab-btn-cashier" class="nav-tab-btn" onclick="switchView('cashier')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          Caja & Asociados
+        </button>
+        <button type="button" id="tab-btn-reports" class="nav-tab-btn" onclick="switchView('reports')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+          Reportes Gerenciales
+        </button>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <button type="button" class="btn btn-primary" onclick="openRegisterModal()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+          Nuevo Asociado
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow">
+    
+    <!-- =========================================================================
+         VIEW 1: PORTAL INSTITUCIONAL & TRM EN VIVO (Persuade Mode)
+         ========================================================================= -->
+    <div id="view-portal" class="view-section">
+      <!-- Hero Section -->
+      <section class="py-12 md:py-16 px-6 max-w-6xl mx-auto w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          
+          <!-- Editorial Left Content -->
+          <div class="lg:col-span-7 flex flex-col items-start gap-6">
+            <h1 class="font-display text-4xl sm:text-5xl text-coop-green-deep tracking-tight leading-tight">
+              Ahorro cooperativo transparente con libro mayor inmutable.
+            </h1>
+            <p class="text-coop-text-secondary text-lg leading-relaxed max-w-xl">
+              Respaldamos el patrimonio de más de 300 asociados con balances calculados directamente desde el libro contable inmutable, consulta en vivo de la TRM oficial colombiana y una gestión financiera intachable.
+            </p>
+
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button type="button" class="btn btn-gold shadow-sm" onclick="switchView('cashier')">
+                Operar en Ventanilla de Caja
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="document.getElementById('simulador-section').scrollIntoView({behavior: 'smooth'})">
+                Simulador de Ahorro
+              </button>
+            </div>
+
+            <!-- Trust highlights -->
+            <div class="grid grid-cols-3 gap-6 pt-6 border-t border-coop-border-light w-full">
+              <div>
+                <span class="block font-mono text-2xl font-bold text-coop-green-deep" id="stat-total-associates">300+</span>
+                <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Asociados Activos</span>
+              </div>
+              <div>
+                <span class="block font-mono text-2xl font-bold text-coop-green-forest" id="stat-total-balance">$0 COP</span>
+                <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Saldo en Custodia</span>
+              </div>
+              <div>
+                <span class="block font-mono text-2xl font-bold text-coop-gold-rich">100%</span>
+                <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Auditoría en Línea</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- TRM Interactive Live Card (Polished & Refined) -->
+          <div class="lg:col-span-5">
+            <div class="trm-card shadow-md">
+              <div class="trm-header">
+                <div>
+                  <div class="trm-title">Tasa Representativa del Mercado</div>
+                  <div class="trm-badge">Superintendencia Financiera de Colombia</div>
+                </div>
+                <div class="trm-actions">
+                  <button type="button" class="trm-sync-btn" id="btn-sync-trm" onclick="refreshTrmManual()" title="Sincronizar TRM oficial">
+                    <svg id="trm-sync-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                    <span>Sincronizar</span>
+                  </button>
+                  <div class="trm-live-indicator">
+                    <span class="trm-dot"></span>
+                    <span class="text-xs text-coop-gold-bright font-bold">EN VIVO</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main TRM Display -->
+              <div class="trm-display-box">
+                <span class="trm-caption">TRM Vigente (1 USD)</span>
+                <div class="trm-rate" id="trm-val-display">$4.185,50</div>
+                <div class="trm-meta" id="trm-sync-time">Sincronizado: datos.gov.co</div>
+              </div>
+
+              <!-- Instant Converter with Swap Toggle -->
+              <div class="converter-box">
+                <div class="flex justify-between items-center mb-3">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-coop-text-on-dark-muted">Conversor Oficial</span>
+                  <span class="text-xs text-coop-gold-bright font-mono">Sin comisión de cambio</span>
+                </div>
+                
+                <div class="grid grid-cols-1 gap-3">
+                  <div>
+                    <label for="cop-input" class="text-xs text-coop-text-on-dark-muted block mb-1 font-semibold">Pesos Colombianos (COP)</label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-2.5 text-xs text-coop-gold-bright font-mono font-bold">$</span>
+                      <input type="number" id="cop-input" class="converter-input pl-7" value="1000000" oninput="convertCopToUsd()">
+                    </div>
+                  </div>
+
+                  <div class="text-center my-0.5">
+                    <button type="button" class="converter-swap-btn" onclick="swapCurrencyConversion()" title="Invertir dirección de conversión">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 4v12m0 0l4-4m-4 4l-4-4"/></svg>
+                    </button>
+                  </div>
+
+                  <div>
+                    <label for="usd-input" class="text-xs text-coop-text-on-dark-muted block mb-1 font-semibold">Dólares Estadounidenses (USD)</label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-2.5 text-xs text-coop-gold-bright font-mono font-bold">US$</span>
+                      <input type="number" id="usd-input" class="converter-input pl-9" oninput="convertUsdToCop()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Interactive Savings Simulator Section -->
+      <section id="simulador-section" class="py-14 bg-coop-surface-white border-y border-coop-border-light">
+        <div class="max-w-4xl mx-auto px-6">
+          <div class="text-center mb-10">
+            <h2 class="font-display text-3xl text-coop-green-deep">Simulador de Ahorro y Rendimiento Programado</h2>
+            <p class="text-coop-text-secondary text-sm mt-2">Calcula tus proyecciones con nuestra tasa preferencial del 10.5% E.A.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div>
+              <label for="slider-amount" class="form-label flex justify-between">
+                <span>Monto Inicial a Ahorrar</span>
+                <span id="slider-amount-val" class="font-mono font-bold text-coop-green-forest">$5.000.000 COP</span>
+              </label>
+              <input type="range" id="slider-amount" class="range-slider my-4" min="500000" max="50000000" step="500000" value="5000000" oninput="updateSimulation()">
+
+              <label for="slider-months" class="form-label flex justify-between mt-4">
+                <span>Plazo de Permanencia</span>
+                <span id="slider-months-val" class="font-mono font-bold text-coop-green-forest">12 meses</span>
+              </label>
+              <input type="range" id="slider-months" class="range-slider my-4" min="3" max="36" step="3" value="12" oninput="updateSimulation()">
+            </div>
+
+            <div class="bg-coop-green-deep text-coop-text-on-dark p-6 rounded-md shadow-inner flex flex-col justify-center">
+              <span class="text-xs uppercase text-coop-text-on-dark-muted tracking-wider">Monto Total Proyectado</span>
+              <div class="font-mono text-3xl font-bold text-coop-text-on-dark mt-2 mb-1" id="sim-final-total">$5.525.000 COP</div>
+              <div class="text-xs text-coop-gold-bright font-mono" id="sim-interests">+ $525.000 COP en rendimientos netos</div>
+              <div class="mt-4 pt-4 border-t border-white/10 text-xs text-coop-text-on-dark-muted">
+                Tasa Efectiva Anual (E.A.): 10.50% | Libre de comisiones de manejo.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- =========================================================================
+         VIEW 2: VENTANILLA DE CAJA & GESTIÓN 360° DE ASOCIADOS (Operate Mode)
+         ========================================================================= -->
+    <div id="view-cashier" class="view-section hidden py-8 px-6 max-w-6xl mx-auto w-full">
+      
+      <!-- Section Header -->
+      <div class="flex justify-between items-center flex-wrap gap-4 mb-6">
+        <div>
+          <h2 class="font-display text-2xl sm:text-3xl text-coop-green-deep">Gestión Integral de Caja y Directorio</h2>
+          <p class="text-xs text-coop-text-secondary mt-1">Operaciones inmediatas en ventanilla y consulta de asociados.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <button type="button" class="btn btn-primary" onclick="openRegisterModal()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Registrar Asociado
+          </button>
+        </div>
+      </div>
+
+      <!-- Ficha 360° del Asociado Seleccionado -->
+      <div id="selected-associate-container" class="hidden">
+        <div class="associate-card-360">
+          <div class="associate-header">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span id="card-doc-type" class="ds-badge badge-doc">CC</span>
+                <span id="card-document" class="font-mono font-bold text-lg text-coop-green-deep">1020304050</span>
+                <span id="card-status-badge" class="ds-badge badge-deposit">Activo</span>
+              </div>
+              <h3 id="card-name" class="font-display text-2xl text-coop-green-deep">Nombre del Asociado</h3>
+              <p class="text-xs text-coop-text-tertiary mt-1" id="card-registration-date">Registrado el: 2026-01-15</p>
+            </div>
+
+            <!-- Balance in COP & USD TRM -->
+            <div class="associate-balance-box">
+              <div class="associate-balance-label">Saldo en Custodia (COP)</div>
+              <div id="card-balance-cop" class="associate-balance-amount">$0 COP</div>
+              <div id="card-balance-usd" class="associate-balance-usd">≈ US$ 0.00 (TRM en vivo)</div>
+            </div>
+          </div>
+
+          <!-- Contact Details Grid -->
+          <div class="associate-details-grid">
+            <div class="associate-detail-item">
+              <span class="associate-detail-label">Teléfono de Contacto</span>
+              <span class="associate-detail-val" id="card-phone">--</span>
+            </div>
+            <div class="associate-detail-item">
+              <span class="associate-detail-label">Correo Electrónico</span>
+              <span class="associate-detail-val" id="card-email">--</span>
+            </div>
+            <div class="associate-detail-item">
+              <span class="associate-detail-label">Dirección Residencial</span>
+              <span class="associate-detail-val" id="card-address">--</span>
+            </div>
+            <div class="associate-detail-item">
+              <span class="associate-detail-label">Total Transacciones</span>
+              <span class="associate-detail-val font-mono" id="card-tx-count">0 movimientos</span>
+            </div>
+          </div>
+
+          <!-- Action Buttons Bar -->
+          <div class="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-coop-border-light">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" onclick="openDepositModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                Realizar Consignación
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="openWithdrawModal()">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                Realizar Retiro
+              </button>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="openEditModal()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                Editar Datos
+              </button>
+              <button type="button" class="btn btn-danger btn-sm" onclick="confirmDeleteAssociate()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Eliminar
+              </button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="closeAssociateCard()">
+                Cerrar Ficha
+              </button>
+            </div>
+          </div>
+
+          <!-- Associate Transactions History Sub-Table -->
+          <div class="mt-6 pt-6 border-t border-coop-border-medium">
+            <h3 class="font-display text-lg text-coop-green-deep mb-3">Historial de Transacciones del Asociado</h3>
+            <table class="ds-table" id="associate-tx-table">
+              <thead>
+                <tr>
+                  <th>Fecha y Hora</th>
+                  <th class="text-center">Tipo</th>
+                  <th class="num-cell">Monto (COP)</th>
+                  <th class="num-cell">Comisión</th>
+                  <th class="num-cell">Id Transacción</th>
+                </tr>
+              </thead>
+              <tbody id="associate-tx-tbody">
+                <tr><td colspan="5" class="text-center text-coop-text-tertiary py-4">Sin transacciones registradas</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Filters Toolbar -->
+      <div class="bg-coop-surface-white border border-coop-border-light rounded-md p-4 mb-4 shadow-sm">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
+          
+          <!-- Live Search Input -->
+          <div class="md:col-span-5 relative">
+            <svg class="absolute left-3.5 top-3 text-coop-text-tertiary" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="associate-search-input" class="form-control pl-10" placeholder="Buscar por documento o nombre completo..." oninput="handleSearchInput(event)">
+          </div>
+
+          <!-- Document Type Filter -->
+          <div class="md:col-span-2">
+            <select id="filter-doc-type" class="form-control" onchange="applyFilters()">
+              <option value="">Tipo Documento: Todos</option>
+              <option value="CC">Cédula de Ciudadanía (CC)</option>
+              <option value="TI">Tarjeta de Identidad (TI)</option>
+              <option value="CE">Cédula de Extranjería (CE)</option>
+              <option value="NIT">NIT / Persona Jurídica</option>
+              <option value="PAS">Pasaporte (PAS)</option>
+            </select>
+          </div>
+
+          <!-- Balance Status Filter -->
+          <div class="md:col-span-2">
+            <select id="filter-balance" class="form-control" onchange="applyFilters()">
+              <option value="">Saldo: Todos</option>
+              <option value="positive">Con Saldo Positivo (&gt; $0)</option>
+              <option value="zero">Con Saldo en Cero ($0)</option>
+            </select>
+          </div>
+
+          <!-- Sort Selector -->
+          <div class="md:col-span-3">
+            <select id="sort-associates" class="form-control" onchange="applyFilters()">
+              <option value="name_asc">Ordenar: Nombre (A - Z)</option>
+              <option value="name_desc">Ordenar: Nombre (Z - A)</option>
+              <option value="balance_desc">Ordenar: Saldo (Mayor a Menor)</option>
+              <option value="balance_asc">Ordenar: Saldo (Menor a Mayor)</option>
+              <option value="date_desc">Ordenar: Más recientes primero</option>
+            </select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Associates Directory Table -->
+      <div class="table-container">
+        <table class="ds-table" id="associates-directory-table">
+          <thead>
+            <tr>
+              <th class="text-center" style="width: 70px;">Tipo</th>
+              <th style="width: 130px;">Documento</th>
+              <th>Nombre Completo del Asociado</th>
+              <th>Teléfono</th>
+              <th class="text-center" style="width: 60px;">Movs</th>
+              <th class="num-cell" style="width: 160px;">Saldo Actual (COP)</th>
+              <th class="text-center" style="width: 140px;">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="associates-directory-tbody">
+            <tr>
+              <td colspan="7" class="text-center py-8 text-coop-text-tertiary">Cargando directorio de asociados...</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Table Pagination Bar -->
+        <div class="ds-pagination">
+          <div id="pagination-info">Mostrando 0 de 0 asociados</div>
+          <div class="ds-pagination-controls">
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-page" onclick="prevPage()" disabled>‹ Anterior</button>
+            <span id="pagination-current-page" class="font-mono text-xs px-2 font-bold">1</span>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn-next-page" onclick="nextPage()" disabled>Siguiente ›</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         VIEW 3: DASHBOARD DE REPORTES GERENCIALES (Read / Operate Mode)
+         ========================================================================= -->
+    <div id="view-reports" class="view-section hidden py-8 px-6 max-w-6xl mx-auto w-full">
+      
+      <!-- Section Title -->
+      <div class="mb-6">
+        <h2 class="font-display text-2xl sm:text-3xl text-coop-green-deep">Dashboard de Reportes Gerenciales</h2>
+        <p class="text-coop-text-secondary text-sm mt-1">Métricas en tiempo real auditadas contra el libro mayor inmutable.</p>
+      </div>
+
+      <!-- KPI Executive Grid (Reporte 1: Consolidado) -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Asociados Totales</span>
+          <div class="kpi-value" id="kpi-total-associates">0</div>
+          <span class="kpi-subtext">Registrados en la cooperativa</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Saldo Total en Custodia</span>
+          <div class="kpi-value text-coop-green-forest" id="kpi-total-balance">$0 COP</div>
+          <span class="kpi-subtext">Patrimonio consolidado</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Saldo Promedio por Asociado</span>
+          <div class="kpi-value text-coop-gold-rich" id="kpi-avg-balance">$0 COP</div>
+          <span class="kpi-subtext">Ticket promedio de ahorro</span>
+        </div>
+      </div>
+
+      <!-- Report Tab Selector -->
+      <div class="nav-tab-container mb-6">
+        <button type="button" class="nav-tab-btn active" id="rep-tab-top" onclick="selectReportTab('top')">
+          1. Top 5 Mayores Saldos
+        </button>
+        <button type="button" class="nav-tab-btn" id="rep-tab-flow" onclick="selectReportTab('flow')">
+          2. Balance de Caja por Rango de Fechas
+        </button>
+        <button type="button" class="nav-tab-btn" id="rep-tab-dormant" onclick="selectReportTab('dormant')">
+          3. Asociados Inactivos (0 Movs)
+        </button>
+        <button type="button" class="nav-tab-btn" id="rep-tab-largest" onclick="selectReportTab('largest')">
+          4. Top 10 Transacciones Más Grandes
+        </button>
+        <button type="button" class="nav-tab-btn" id="rep-tab-movements" onclick="selectReportTab('movements')">
+          5. Movimientos por Asociado
+        </button>
+      </div>
+
+      <!-- Report Subview: Top 5 Associates -->
+      <div id="rep-subview-top" class="report-panel">
+        <div class="table-container">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 60px;">Puesto</th>
+                <th>Documento</th>
+                <th>Nombre Completo del Asociado</th>
+                <th class="text-center">Movimientos</th>
+                <th class="num-cell">Saldo Total (COP)</th>
+              </tr>
+            </thead>
+            <tbody id="rep-tbody-top">
+              <tr><td colspan="5" class="text-center py-6 text-coop-text-tertiary">Cargando ranking...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Report Subview: Date Range Cash Flow (Flattened) -->
+      <div id="rep-subview-flow" class="report-panel hidden">
+        <!-- Date Selector Filter Form -->
+        <div class="bg-coop-surface-white border border-coop-border-light rounded-md p-4 mb-4 shadow-sm flex flex-wrap items-end gap-4">
+          <div>
+            <label for="flow-start-date" class="form-label">Fecha Inicial</label>
+            <input type="date" id="flow-start-date" class="form-control">
+          </div>
+          <div>
+            <label for="flow-end-date" class="form-label">Fecha Final</label>
+            <input type="date" id="flow-end-date" class="form-control">
+          </div>
+          <div>
+            <button type="button" class="btn btn-primary" onclick="loadDateRangeReport()">
+              Consultar Flujo de Caja
+            </button>
+          </div>
+        </div>
+
+        <div class="py-4">
+          <h3 class="font-display text-xl text-coop-green-deep mb-4" id="flow-period-label">Resumen del Período</h3>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="p-4 bg-coop-surface-white rounded border border-coop-border-light shadow-sm">
+              <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Consignaciones</span>
+              <div class="font-mono text-xl font-bold text-coop-green-forest mt-1" id="flow-deposits-val">$0 COP</div>
+              <span class="text-xs text-coop-text-secondary" id="flow-deposits-count">0 operaciones</span>
+            </div>
+            <div class="p-4 bg-coop-surface-white rounded border border-coop-border-light shadow-sm">
+              <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Retiros</span>
+              <div class="font-mono text-xl font-bold text-coop-green-deep mt-1" id="flow-withdrawals-val">$0 COP</div>
+              <span class="text-xs text-coop-text-secondary" id="flow-withdrawals-count">0 operaciones</span>
+            </div>
+            <div class="p-4 bg-coop-surface-white rounded border border-coop-border-light shadow-sm">
+              <span class="text-xs text-coop-text-tertiary uppercase font-semibold">Comisiones Recaudadas</span>
+              <div class="font-mono text-xl font-bold text-coop-gold-rich mt-1" id="flow-commissions-val">$0 COP</div>
+              <span class="text-xs text-coop-text-secondary">Tarifas automáticas</span>
+            </div>
+            <div class="p-4 bg-coop-green-deep text-coop-text-on-dark rounded shadow-sm">
+              <span class="text-xs text-coop-text-on-dark-muted uppercase font-semibold">Flujo Neto del Período</span>
+              <div class="font-mono text-xl font-bold text-coop-text-on-dark mt-1" id="flow-net-val">$0 COP</div>
+              <span class="text-xs text-coop-text-on-dark-muted" id="flow-total-txs">0 transacciones totales</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Subview: Dormant Associates (With Pagination) -->
+      <div id="rep-subview-dormant" class="report-panel hidden">
+        <div class="table-container">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th style="width: 140px;">Documento</th>
+                <th>Nombre del Asociado</th>
+                <th>Fecha de Registro</th>
+                <th class="text-center">Estado</th>
+              </tr>
+            </thead>
+            <tbody id="rep-tbody-dormant">
+              <tr><td colspan="4" class="text-center py-6 text-coop-text-tertiary">Cargando cuentas inactivas...</td></tr>
+            </tbody>
+          </table>
+          <div class="ds-pagination">
+            <div id="dormant-pagination-info">Mostrando 0 de 0 cuentas inactivas</div>
+            <div class="ds-pagination-controls">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-dormant" onclick="prevReportPage('dormant')" disabled>‹ Anterior</button>
+              <span id="dormant-page-num" class="font-mono text-xs px-2 font-bold">1</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-next-dormant" onclick="nextReportPage('dormant')" disabled>Siguiente ›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Subview: Top 10 Largest Transactions (With Pagination) -->
+      <div id="rep-subview-largest" class="report-panel hidden">
+        <div class="table-container">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 60px;">#</th>
+                <th>Fecha y Hora</th>
+                <th class="text-center">Tipo</th>
+                <th>Asociado</th>
+                <th class="num-cell">Monto (COP)</th>
+                <th class="num-cell">Comisión</th>
+              </tr>
+            </thead>
+            <tbody id="rep-tbody-largest">
+              <tr><td colspan="6" class="text-center py-6 text-coop-text-tertiary">Cargando transacciones...</td></tr>
+            </tbody>
+          </table>
+          <div class="ds-pagination">
+            <div id="largest-pagination-info">Mostrando 0 de 0 transacciones</div>
+            <div class="ds-pagination-controls">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-largest" onclick="prevReportPage('largest')" disabled>‹ Anterior</button>
+              <span id="largest-page-num" class="font-mono text-xs px-2 font-bold">1</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-next-largest" onclick="nextReportPage('largest')" disabled>Siguiente ›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report Subview: Movements Summary per Associate (With Pagination) -->
+      <div id="rep-subview-movements" class="report-panel hidden">
+        <div class="table-container">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Nombre del Asociado</th>
+                <th class="text-center">Total Movs</th>
+                <th class="num-cell">Total Ingresos</th>
+                <th class="num-cell">Total Egresos + Comisiones</th>
+                <th class="num-cell">Saldo Actual</th>
+              </tr>
+            </thead>
+            <tbody id="rep-tbody-movements">
+              <tr><td colspan="6" class="text-center py-6 text-coop-text-tertiary">Cargando resumen de movimientos...</td></tr>
+            </tbody>
+          </table>
+          <div class="ds-pagination">
+            <div id="movements-pagination-info">Mostrando 0 de 0 asociados</div>
+            <div class="ds-pagination-controls">
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-prev-movements" onclick="prevReportPage('movements')" disabled>‹ Anterior</button>
+              <span id="movements-page-num" class="font-mono text-xs px-2 font-bold">1</span>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-next-movements" onclick="nextReportPage('movements')" disabled>Siguiente ›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- =========================================================================
+       MODALS SYSTEM (Institutional Modal Engine)
+       ========================================================================= -->
+
+  <!-- Modal 1: Register New Associate -->
+  <div id="modal-register" class="modal-overlay" onclick="handleBackdropClick(event, 'modal-register')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="font-display">Registro de Nuevo Asociado</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modal-register')">&times;</button>
+      </div>
+      <form id="form-register-associate" onsubmit="handleRegisterAssociate(event)">
+        <div class="modal-body">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="form-group sm:col-span-1">
+              <label for="reg-doc-type" class="form-label">Tipo Doc *</label>
+              <select id="reg-doc-type" class="form-control" required>
+                <option value="CC">CC</option>
+                <option value="TI">TI</option>
+                <option value="CE">CE</option>
+                <option value="NIT">NIT</option>
+                <option value="PAS">PAS</option>
+              </select>
+            </div>
+            <div class="form-group sm:col-span-2">
+              <label for="reg-document" class="form-label">Número de Documento *</label>
+              <input type="text" id="reg-document" class="form-control" placeholder="Ej. 1020304050" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-name" class="form-label">Nombre Completo (1 Nombre y 2 Apellidos) *</label>
+            <input type="text" id="reg-name" class="form-control" placeholder="Ej. Carlos Alberto Mendoza Gómez" required>
+            <span class="text-xs text-coop-text-tertiary">Debe cumplir la convención colombiana de 1 nombre y 2 apellidos.</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="form-group">
+              <label for="reg-phone" class="form-label">Teléfono Móvil / Contacto</label>
+              <input type="text" id="reg-phone" class="form-control" placeholder="Ej. 3001234567">
+            </div>
+            <div class="form-group">
+              <label for="reg-email" class="form-label">Correo Electrónico</label>
+              <input type="email" id="reg-email" class="form-control" placeholder="asociado@correo.com">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="reg-address" class="form-label">Dirección Residencial</label>
+            <input type="text" id="reg-address" class="form-control" placeholder="Ej. Carrera 15 # 45-20, Bogotá">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-register')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Asociado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 2: Edit Associate Profile -->
+  <div id="modal-edit" class="modal-overlay" onclick="handleBackdropClick(event, 'modal-edit')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="font-display">Modificar Datos de Asociado</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modal-edit')">&times;</button>
+      </div>
+      <form id="form-edit-associate" onsubmit="handleEditAssociate(event)">
+        <div class="modal-body">
+          <input type="hidden" id="edit-document-hidden">
+          
+          <div class="form-group">
+            <label for="edit-name" class="form-label">Nombre Completo *</label>
+            <input type="text" id="edit-name" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-phone" class="form-label">Teléfono de Contacto</label>
+            <input type="text" id="edit-phone" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="edit-email" class="form-label">Correo Electrónico</label>
+            <input type="email" id="edit-email" class="form-control">
+          </div>
+
+          <div class="form-group">
+            <label for="edit-address" class="form-label">Dirección Residencial</label>
+            <input type="text" id="edit-address" class="form-control">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 3: Deposit (Consignación) -->
+  <div id="modal-deposit" class="modal-overlay" onclick="handleBackdropClick(event, 'modal-deposit')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="font-display">Realizar Consignación</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modal-deposit')">&times;</button>
+      </div>
+      <form id="form-deposit" onsubmit="handleDepositSubmit(event)">
+        <div class="modal-body">
+          <div class="bg-coop-canvas p-3 rounded mb-4 text-sm">
+            <span class="text-xs text-coop-text-tertiary uppercase block">Asociado Destino</span>
+            <strong id="deposit-associate-name" class="text-coop-green-deep">--</strong>
+            <span id="deposit-associate-doc" class="font-mono text-xs text-coop-text-secondary block mt-0.5">--</span>
+          </div>
+
+          <div class="form-group">
+            <label for="deposit-amount" class="form-label">Monto a Consignar (COP) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-sm font-bold text-coop-text-tertiary">$</span>
+              <input type="number" id="deposit-amount" class="form-control pl-8 font-mono text-base" min="1000" step="1000" placeholder="Ej. 100000" required>
+            </div>
+            <span class="text-xs text-coop-text-tertiary mt-1 block">El valor debe ser mayor a $0 COP.</span>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-deposit')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Consignación</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 4: Withdrawal (Retiro con Comisión) -->
+  <div id="modal-withdraw" class="modal-overlay" onclick="handleBackdropClick(event, 'modal-withdraw')">
+    <div class="modal-box" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="font-display">Realizar Retiro de Fondos</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modal-withdraw')">&times;</button>
+      </div>
+      <form id="form-withdraw" onsubmit="handleWithdrawSubmit(event)">
+        <div class="modal-body">
+          <div class="bg-coop-canvas p-3 rounded mb-4 text-sm flex justify-between items-center">
+            <div>
+              <span class="text-xs text-coop-text-tertiary uppercase block">Asociado</span>
+              <strong id="withdraw-associate-name" class="text-coop-green-deep">--</strong>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-coop-text-tertiary uppercase block">Saldo Disponible</span>
+              <strong id="withdraw-associate-balance" class="font-mono text-coop-green-forest">$0 COP</strong>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="withdraw-amount" class="form-label">Monto a Retirar (COP) *</label>
+            <div class="relative">
+              <span class="absolute left-3 top-2.5 text-sm font-bold text-coop-text-tertiary">$</span>
+              <input type="number" id="withdraw-amount" class="form-control pl-8 font-mono text-base" min="1000" step="1000" placeholder="Ej. 500000" oninput="checkWithdrawalCommission()" required>
+            </div>
+          </div>
+
+          <!-- Dynamic Commission Notice (High Withdrawal > 1,000,000 COP) -->
+          <div id="withdraw-commission-alert" class="commission-notice hidden">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <div class="text-xs">
+              <strong>Aviso de Comisión Automática:</strong> Retiros superiores a $1.000.000 COP tienen una comisión de $8.000 COP.<br>
+              Total a debitar: <span id="withdraw-total-debit" class="font-mono font-bold">--</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-withdraw')">Cancelar</button>
+          <button type="submit" class="btn btn-gold">Confirmar y Debitar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 5: Digital Cashier Receipt (Comprobante Oficial) -->
+  <div id="modal-receipt" class="modal-overlay" onclick="handleBackdropClick(event, 'modal-receipt')">
+    <div class="modal-box max-w-lg" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="font-display">Comprobante de Caja</h3>
+        <button type="button" class="modal-close-btn" onclick="closeModal('modal-receipt')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="ds-receipt">
+          <div class="ds-receipt-header">
+            <h4 class="font-display text-lg text-coop-green-deep">Cooperativa Financiera El Progreso</h4>
+            <span class="text-xs text-coop-text-tertiary">NIT: 890.123.456-7 | Vigilada Superfinanciera</span>
+            <div id="receipt-tx-title" class="font-mono text-sm font-bold text-coop-green-forest mt-2">COMPROBANTE DE TRANSACCIÓN</div>
+          </div>
+
+          <div class="ds-receipt-row">
+            <span class="text-coop-text-secondary">ID Transacción:</span>
+            <span id="receipt-tx-id" class="font-mono font-bold text-coop-text-primary">--</span>
+          </div>
+          <div class="ds-receipt-row">
+            <span class="text-coop-text-secondary">Fecha y Hora:</span>
+            <span id="receipt-tx-date" class="font-mono text-coop-text-primary">--</span>
+          </div>
+          <div class="ds-receipt-row">
+            <span class="text-coop-text-secondary">Asociado:</span>
+            <span id="receipt-tx-associate" class="font-bold text-coop-text-primary">--</span>
+          </div>
+          <div class="ds-receipt-row">
+            <span class="text-coop-text-secondary">Documento:</span>
+            <span id="receipt-tx-doc" class="font-mono text-coop-text-primary">--</span>
+          </div>
+
+          <div class="ds-receipt-row total-row">
+            <span class="text-coop-text-primary">Monto Operación:</span>
+            <span id="receipt-tx-amount" class="font-mono text-base font-bold text-coop-green-forest">--</span>
+          </div>
+
+          <div class="ds-receipt-row" id="receipt-row-commission">
+            <span class="text-coop-text-secondary">Comisión por Manejo:</span>
+            <span id="receipt-tx-commission" class="font-mono font-bold text-coop-gold-tag-text">--</span>
+          </div>
+
+          <div class="ds-receipt-row total-row" id="receipt-row-total-debited">
+            <span class="text-coop-text-primary">Total Debitado:</span>
+            <span id="receipt-tx-total-debited" class="font-mono text-base font-bold text-red-700">--</span>
+          </div>
+
+          <div class="ds-receipt-row">
+            <span class="text-coop-text-secondary">Nuevo Saldo en Cuenta:</span>
+            <span id="receipt-tx-new-balance" class="font-mono font-bold text-coop-green-deep">--</span>
+          </div>
+
+          <div class="text-center mt-6 pt-4 border-t border-coop-border-light text-xs text-coop-text-tertiary">
+            Transacción auditada y registrada en el libro mayor inmutable de la cooperativa.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="window.print()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          Imprimir Recibo
+        </button>
+        <button type="button" class="btn btn-primary" onclick="closeModal('modal-receipt')">Aceptar y Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer class="bg-coop-green-deep text-coop-text-on-dark-muted py-8 px-6 border-t border-white/10 mt-auto text-xs">
+    <div class="max-w-6xl mx-auto flex justify-between items-center flex-wrap gap-4">
+      <div>
+        <strong class="text-white block font-display text-sm">Cooperativa Financiera El Progreso</strong>
+        <span>Garantía de libro contable inmutable, inclusión financiera y solidez solidaria.</span>
+      </div>
+      <div>
+        <span>Desarrollado con arquitectura limpia en .NET 10 y Sistema de Diseño Impeccable.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="js/app.js"></script>
+</body>
+</html>
