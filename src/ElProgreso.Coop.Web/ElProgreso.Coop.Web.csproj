@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="..\ElProgreso.Coop.Domain\ElProgreso.Coop.Domain.csproj" />
+    <ProjectReference Include="..\ElProgreso.Coop.Application\ElProgreso.Coop.Application.csproj" />
+    <ProjectReference Include="..\ElProgreso.Coop.Infrastructure\ElProgreso.Coop.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>

@@ -1,0 +1,562 @@
+/* ==========================================================================
+   Modular UI Components - Cooperativa Financiera El Progreso
+   Design System: The Sovereign Ledger House (Impeccable Craft Floor)
+   ========================================================================== */
+
+/* --- Buttons --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  font-family: var(--font-sans);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-secondary {
+  background-color: var(--coop-surface-white);
+  color: var(--coop-green-deep);
+  border-color: var(--coop-border-medium);
+}
+
+.btn-secondary:hover {
+  background-color: var(--coop-surface-muted);
+  border-color: var(--coop-green-pine);
+}
+
+.btn-primary {
+  background-color: var(--coop-green-forest);
+  color: var(--coop-text-on-dark);
+  border-color: var(--coop-green-deep);
+}
+
+.btn-primary:hover {
+  background-color: var(--coop-green-deep);
+}
+
+.btn-gold {
+  background-color: var(--coop-gold-rich);
+  color: #101c16;
+  border-color: var(--coop-gold-rich);
+  font-weight: 700;
+}
+
+.btn-gold:hover {
+  background-color: var(--coop-gold-bright);
+}
+
+.btn-danger {
+  background-color: var(--coop-green-deep);
+  color: #ffffff;
+  border-color: var(--coop-green-deep);
+}
+
+.btn-danger:hover {
+  background-color: var(--coop-green-forest);
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.btn-group {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* --- Navigation Tabs --- */
+.nav-tab-container {
+  display: flex;
+  gap: 0.5rem;
+  background: var(--coop-surface-muted);
+  padding: 0.375rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--coop-border-light);
+  overflow-x: auto;
+}
+
+.nav-tab-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--coop-text-secondary);
+  padding: 0.625rem 1.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.nav-tab-btn:hover {
+  color: var(--coop-green-deep);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.nav-tab-btn.active {
+  background: var(--coop-surface-white);
+  color: var(--coop-green-forest);
+  box-shadow: var(--shadow-sm);
+}
+
+/* --- Badges & Tags --- */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge-doc {
+  background-color: var(--coop-surface-muted);
+  color: var(--coop-green-forest);
+  border: 1px solid var(--coop-border-medium);
+}
+
+.badge-deposit {
+  background-color: var(--coop-surface-muted);
+  color: var(--coop-green-forest);
+  border: 1px solid var(--coop-green-pine);
+}
+
+.badge-withdraw {
+  background-color: var(--coop-gold-tag-bg);
+  color: var(--coop-gold-tag-text);
+  border: 1px solid rgba(179, 133, 21, 0.3);
+}
+
+.badge-commission {
+  background-color: var(--coop-gold-tag-bg);
+  color: var(--coop-gold-tag-text);
+  border: 1px solid rgba(179, 133, 21, 0.3);
+}
+
+/* --- Data Tables --- */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  padding: 0.75rem;
+  background: var(--coop-surface-white);
+  border: 1px solid var(--coop-border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.ds-table th {
+  background-color: #f8faf9;
+  color: var(--coop-text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--coop-border-medium);
+}
+
+.ds-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid var(--coop-border-light);
+  color: var(--coop-text-primary);
+  vertical-align: middle;
+}
+
+.ds-table tbody tr:hover {
+  background-color: #f4f8f6;
+}
+
+.ds-table .num-cell {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  font-weight: 600;
+}
+
+.ds-table .text-center {
+  text-align: center;
+}
+
+/* --- Pagination Controls --- */
+.ds-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.875rem 0.25rem 0.25rem 0.25rem;
+  font-size: 0.875rem;
+  color: var(--coop-text-secondary);
+}
+
+.ds-pagination-controls {
+  display: flex;
+  gap: 0.375rem;
+  align-items: center;
+}
+
+/* --- KPI Executive Cards --- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.kpi-card {
+  background: var(--coop-surface-white);
+  border: 1px solid var(--coop-border-light);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.kpi-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--coop-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.kpi-value {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--coop-green-deep);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+}
+
+.kpi-subtext {
+  font-size: 0.8125rem;
+  color: var(--coop-text-tertiary);
+}
+
+/* --- Ficha 360° del Asociado --- */
+.associate-card-360 {
+  background: var(--coop-surface-white);
+  border: 1px solid var(--coop-border-medium);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.associate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--coop-border-light);
+  margin-bottom: 1.25rem;
+}
+
+.associate-balance-box {
+  background: var(--coop-green-deep);
+  color: var(--coop-text-on-dark);
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-sm);
+  text-align: right;
+  min-width: 220px;
+}
+
+.associate-balance-label {
+  font-size: 0.75rem;
+  color: var(--coop-text-on-dark-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.associate-balance-amount {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--coop-text-on-dark);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+
+.associate-balance-usd {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  color: var(--coop-gold-bright);
+  font-variant-numeric: tabular-nums;
+  margin-top: 0.25rem;
+}
+
+.associate-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.associate-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.associate-detail-label {
+  font-size: 0.75rem;
+  color: var(--coop-text-tertiary);
+  text-transform: uppercase;
+}
+
+.associate-detail-val {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--coop-text-primary);
+}
+
+/* --- Commission Notice Banner --- */
+.commission-notice {
+  background: var(--coop-gold-tag-bg);
+  border: 1px solid rgba(179, 133, 21, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.875rem 1.25rem;
+  color: var(--coop-gold-tag-text);
+  font-size: 0.875rem;
+  margin: 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* --- Recibo Bancario Digital --- */
+.ds-receipt {
+  background: #ffffff;
+  padding: 1.5rem;
+  max-width: 480px;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+}
+
+.ds-receipt-header {
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px dashed var(--coop-border-medium);
+  margin-bottom: 1.25rem;
+}
+
+.ds-receipt-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.375rem 0;
+  font-size: 0.875rem;
+}
+
+.ds-receipt-row.total-row {
+  border-top: 1px solid var(--coop-border-light);
+  border-bottom: 1px solid var(--coop-border-light);
+  padding: 0.625rem 0;
+  margin: 0.625rem 0;
+  font-weight: 700;
+}
+
+/* --- Modal System --- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 35, 25, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-box {
+  background: var(--coop-surface-white);
+  border-radius: var(--radius-md);
+  width: 100%;
+  max-width: 540px;
+  box-shadow: var(--shadow-dark);
+  overflow: hidden;
+  border: 1px solid var(--coop-border-light);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  background-color: var(--coop-green-deep);
+  color: var(--coop-text-on-dark);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  color: var(--coop-text-on-dark);
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: var(--coop-text-on-dark-muted);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close-btn:hover {
+  color: #ffffff;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.modal-footer {
+  background-color: var(--coop-surface-muted);
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  border-top: 1px solid var(--coop-border-light);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1.125rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--coop-text-secondary);
+  margin-bottom: 0.375rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  font-family: var(--font-sans);
+  border: 1px solid var(--coop-border-medium);
+  border-radius: var(--radius-sm);
+  background-color: #ffffff;
+  color: var(--coop-text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+}
+
+.form-control:focus {
+  border-color: var(--coop-green-forest);
+  box-shadow: 0 0 0 3px rgba(11, 56, 40, 0.15);
+}
+
+/* --- Toast Notifications --- */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  background: var(--coop-green-deep);
+  color: #ffffff;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  animation: toastIn 0.2s ease-out;
+  border-left: 4px solid var(--coop-gold-rich);
+  max-width: 360px;
+}
+
+.toast-error {
+  border-left-color: var(--coop-green-deep);
+}
+
+.toast-success {
+  border-left-color: var(--coop-green-pine);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Range Slider */
+.range-slider {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--coop-surface-muted);
+  outline: none;
+  -webkit-appearance: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--coop-green-forest);
+  border: 2px solid var(--coop-gold-rich);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.1s ease;
+}
+
+.range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}

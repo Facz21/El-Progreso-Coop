@@ -21,12 +21,12 @@ obj/
 !.vscode/extensions.json
 *.code-workspace
 
-## Databases & Local Logs
-*.db
-*.db-log
-*.db-shm
-*.db-wal
-*.log
+## Node & Web Tooling (if applicable)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
 ## Test & Coverage Results
 TestResults/
@@ -35,12 +35,25 @@ coverage*.json
 coverage*.xml
 coverage*.info
 
+## Databases & Local Logs
+*.db-shm
+*.db-wal
+*.log
+# Keep seeded LiteDB databases for initial showcase
+!elprogreso.db
+!elprogreso-log.db
+
 ## OS Generated Files
 .DS_Store
 Thumbs.db
 ehthumbs.db
 desktop.ini
 
-## Distribution Packages
+## Distribution Packages & Archives
 *.zip
 *.tar.gz
+
+## Design & Product Specifications (Impeccable)
+DESIGN.md
+PRODUCT.md
+.impeccable/

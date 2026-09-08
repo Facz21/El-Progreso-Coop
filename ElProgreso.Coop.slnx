@@ -4,6 +4,7 @@
     <Project Path="src/ElProgreso.Coop.Domain/ElProgreso.Coop.Domain.csproj" />
     <Project Path="src/ElProgreso.Coop.Infrastructure/ElProgreso.Coop.Infrastructure.csproj" />
     <Project Path="src/ElProgreso.Coop.Presentation.Console/ElProgreso.Coop.Presentation.Console.csproj" />
+    <Project Path="src/ElProgreso.Coop.Web/ElProgreso.Coop.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ElProgreso.Coop.Tests/ElProgreso.Coop.Tests.csproj" />
