@@ -8,8 +8,8 @@ Solución integral y de grado empresarial de core bancario, ventanilla de caja y
 
 La **Cooperativa Financiera El Progreso** custodia los fondos de ahorro de más de 300 asociados en Colombia. Esta plataforma proporciona una solución doble y complementaria:
 
-1. **🌐 Portal Web Institucional & Core de Caja (`ElProgreso.Coop.Web`)**: Aplicación web SPA moderna, accesible y de alta fidelidad visual que integra cotización TRM oficial en tiempo real, simulador de ahorro, ventanilla de operaciones monetarias con comprobantes digitales de caja, ficha 360° del asociado y dashboard ejecutivo de reportes gerenciales con paginación.
-2. **🖥️ Módulo de Terminal Interactivo (`ElProgreso.Coop.Presentation.Console`)**: Interfaz CLI basada en **Spectre.Console** con tablas paginadas, validaciones guiadas y menús fluidos para cajeros y supervisores.
+1. **Portal Web Institucional & Core de Caja (`ElProgreso.Coop.Web`)**: Aplicación web SPA moderna, accesible y de alta fidelidad visual que integra cotización TRM oficial en tiempo real, simulador de ahorro, ventanilla de operaciones monetarias con comprobantes digitales de caja, ficha 360° del asociado y dashboard ejecutivo de reportes gerenciales con paginación.
+2. **Módulo de Terminal Interactivo (`ElProgreso.Coop.Presentation.Console`)**: Interfaz CLI basada en **Spectre.Console** con tablas paginadas, validaciones guiadas y menús fluidos para cajeros y supervisores.
 
 ---
 
@@ -189,7 +189,7 @@ La interfaz visual se rige estrictamente por los principios de diseño documenta
 ### Prerrequisitos
 - [.NET 10 SDK](https://dotnet.microsoft.com/download) instalado en el sistema.
 
-### 🌐 Ejecutar el Portal Web (Recomendado)
+### Ejecutar el Portal Web (Recomendado)
 Para iniciar el servidor web con soporte de recarga en vivo (*live-reload*):
 
 ```bash
@@ -197,21 +197,21 @@ dotnet watch --project src/ElProgreso.Coop.Web
 ```
 > Abre tu navegador en **`http://localhost:5000`** para acceder a la aplicación.
 
-### 🖥️ Ejecutar la Aplicación de Consola (CLI)
+### Ejecutar la Aplicación de Consola (CLI)
 Para interactuar con la terminal de caja:
 
 ```bash
 dotnet run --project src/ElProgreso.Coop.Presentation.Console
 ```
 
-### 🧪 Ejecutar la Suite de Pruebas Automatizadas
+### Ejecutar la Suite de Pruebas Automatizadas
 Para ejecutar las 64 pruebas unitarias y de integración:
 
 ```bash
 dotnet test
 ```
 
-### 🎨 Auditar la Interfaz Web con Impeccable
+### Auditar la Interfaz Web con Impeccable
 Para validar el cumplimiento del sistema de diseño y accesibilidad:
 
 ```bash
